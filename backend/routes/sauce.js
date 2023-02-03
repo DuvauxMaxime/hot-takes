@@ -3,6 +3,8 @@ const router = express.Router();
 const Sauce = require('../models/Sauce')
 
 
+
+
 router.get('/:id', (req, res, next) => {
     Sauce.findOne({ _id: req.params.id })
         .then(sauce => res.status(200).json(sauce))
