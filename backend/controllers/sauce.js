@@ -1,5 +1,7 @@
 const Sauce = require('../models/Sauce');
 
+
+// POST Créer une sauce
 exports.createSauce = (req, res, next) => {
     const sauceObject = JSON.parse(req.body.sauce);
     delete sauceObject._id;
@@ -14,6 +16,7 @@ exports.createSauce = (req, res, next) => {
         .catch(error => { res.status(400).json({ error }) })
 };
 
+// DELETE Suppression d'une sauce
 exports.deleteSauce = (req, res, next) => {
     console.log(req.body);
     res.status(201).json({
@@ -21,6 +24,7 @@ exports.deleteSauce = (req, res, next) => {
     })
 };
 
+// POST Like sauce
 exports.likeSauce = (req, res, next) => {
     console.log(req.body);
     res.status(201).json({
@@ -28,6 +32,7 @@ exports.likeSauce = (req, res, next) => {
     })
 };
 
+// PUT Modifier une sauce
 exports.editSauce = (req, res, next) => {
     console.log(req.body);
     res.status(201).json({
@@ -35,12 +40,14 @@ exports.editSauce = (req, res, next) => {
     })
 };
 
+//GET Toutes les sauces
 exports.getAllSauces = (req, res, next) => {
     Sauce.find()
         .then(sauces => res.status(200).json(sauces))
         .catch(error => res.status(400).json({ error }))
 };
 
+// GET Une seule sauce 
 exports.getOneSauce = (req, res, next) => {
     Sauce.findOne({ _id: req.params.id })
         .then(sauce => res.status(200).json(sauce))
