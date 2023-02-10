@@ -31,6 +31,10 @@ app.use((req, res, next) => {
 
 app.use('/api/sauces', sauceRoutes);
 app.use('/api/auth', userRoutes);
+// Gestion erreur sur endpoint introuvable
+app.use('*', function (req, res) {
+    res.status(404).json({ message: `La page demandée n'existe pas` });
+});
 
 
 
