@@ -1,5 +1,5 @@
 // IMPORTATION DES MODULES
-const mongoose = require('mongoose');
+const mongoose = require('mongoose'); //Package facilitant les interactions avec la DB
 
 
 const sauceSchema = mongoose.Schema({
