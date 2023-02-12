@@ -1,5 +1,6 @@
 // IMPORTATION MODELS
 const Sauce = require('../models/Sauce');
+const fs = require('fs'); // Package de méthodes pour interagir avec le système de fichiers du serveur
 
 
 // POST Créer une sauce
@@ -23,10 +24,22 @@ exports.createSauce = (req, res, next) => {
 
 // DELETE Suppression d'une sauce
 exports.deleteSauce = (req, res, next) => {
-    console.log(req.body);
-    res.status(201).json({
-        message: 'Sauce supprimée !'
-    })
+    Sauce.findOne({ _id: req.params.id })
+        .then(sauce => {
+            if (sauce.userId != req.auth.userId) {
+                res.status(401).json({ message: 'Not authorized' });
+            } else {
+                const filename = sauce.imageUrl.split('/images/')[1];
+                fs.unlink(`images/${filename}`, () => {
+                    Sauce.deleteOne({ _id: req.params.id })
+                        .then(() => { res.status(200).json({ message: 'Objet supprimé !' }) })
+                        .catch(error => res.status(401).json({ error }));
+                });
+            }
+        })
+        .catch(error => {
+            res.status(500).json({ error });
+        });
 };
 
 // POST Like sauce
