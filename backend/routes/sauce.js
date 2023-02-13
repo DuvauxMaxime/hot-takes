@@ -1,8 +1,9 @@
 // IMPORTATION DES MODULES
 const express = require('express');
-const router = express.Router(); //permet la création de routeurs pour chaque route principale de l'app 
 const auth = require('../middleware/auth');
 const multer = require('../middleware/multer-config');
+const router = express.Router(); //permet la création de routeurs pour chaque route principale de l'app 
+
 
 // IMPORTATION DU CONTROLLER
 const sauceCtrl = require('../controllers/sauce');

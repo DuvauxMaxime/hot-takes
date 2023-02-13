@@ -5,17 +5,17 @@ const fs = require('fs'); // Package de méthodes pour interagir avec le systèm
 
 // POST Créer une sauce
 exports.createSauce = (req, res, next) => {
-    const sauceObject = JSON.parse(req.body.sauce);
-    delete sauceObject._id;
-    delete sauceObject._userId;
-    const sauce = new Sauce({
-        ...sauceObject,
+    const sauceObject = JSON.parse(req.body.sauce); //parse de l'objet JSON 
+    delete sauceObject._id; // Suppression _id dans l'objet 
+    delete sauceObject._userId; // Suppresion userId dans l'objet 
+    const sauce = new Sauce({ // création de l'objet
+        ...sauceObject, // récupère les données précédentes (sans les champs delete)
         likes: 0,
         dislikes: 0,
         usersLiked: [],
         usersDisliked: [],
-        userId: req.auth.userId,
-        imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
+        userId: req.auth.userId, // récupération de userId de la requête
+        imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}` //génère url de l'image car multer ne remonte que le nom de fichier
     });
     sauce.save()
         .then(() => { res.status(201).json({ message: 'Sauce enregistrée !' }) })

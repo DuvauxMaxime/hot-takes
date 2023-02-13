@@ -9,7 +9,7 @@ const User = require('../models/User');
 
 // POST inscription
 exports.signup = (req, res, next) => {
-    bcrypt.hash(req.body.password, 10) // Créer un hash du password pour enregistrer dans la DB 
+    bcrypt.hash(req.body.password, 10) // Fonction créer un hash du password pour enregistrer dans la DB + salt = 10 tours
         .then(hash => {
             const user = new User({
                 email: req.body.email,
@@ -17,29 +17,29 @@ exports.signup = (req, res, next) => {
             });
             user.save()
                 .then(() => res.status(201).json({ message: 'Utilisateur créé !' }))
-                .catch(error => res.status(500).json({ error }));
+                .catch(error => res.status(400).json({ error }));
         })
         .catch(error => res.status(500).json({ error }));
 };
 
 // POST connection 
 exports.login = (req, res, next) => {
-    User.findOne({ email: req.body.email })
+    User.findOne({ email: req.body.email }) // Objet qui sert de filtre
         .then(user => {
-            if (user === null) {
+            if (user === null) { // Vérifie si l'utilisateur existe dans la DB
                 res.status(401).json({ message: 'Utilisateur/Mot de passe erroné' });
-            } else {
-                bcrypt.compare(req.body.password, user.password)
+            } else { // Si l'utilisateur existe dans la DB
+                bcrypt.compare(req.body.password, user.password) //Méthode pour comparer le mot de passe tranmis au hash de la DB
                     .then(valid => {
-                        if (!valid) {
+                        if (!valid) { // Si False = password erroné 
                             res.status(401).json({ message: 'Utilisateur/Mot de passe erroné' });
-                        } else {
+                        } else { // Si password correct 
                             res.status(200).json({
                                 userId: user._id,
-                                token: jwt.sign(
-                                    { userId: user._id },
-                                    `${process.env.SECRET_KEY}`,
-                                    { expiresIn: '24h' }
+                                token: jwt.sign( // Méthode pour chiffrer un nouveau token de JWT avec 3 arguments
+                                    { userId: user._id }, // identifiant utilisateur
+                                    `${process.env.SECRET_KEY}`, // clé secrète
+                                    { expiresIn: '24h' } // délai d'expiration du token
                                 )
                             });
                         }
