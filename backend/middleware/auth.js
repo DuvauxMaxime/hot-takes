@@ -1,6 +1,6 @@
 // IMPORTATION DES MODULES
 require('dotenv').config();
-const jwt = require('jsonwebtoken');
+const jwt = require('jsonwebtoken'); //package de création + vérification de token
 
 
 // Authentification

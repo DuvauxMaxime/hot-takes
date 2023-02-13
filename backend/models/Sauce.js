@@ -1,7 +1,7 @@
 // IMPORTATION DES MODULES
 const mongoose = require('mongoose'); //Package facilitant les interactions avec la DB
 
-
+// Modele de données Sauce
 const sauceSchema = mongoose.Schema({
     userId: { type: String, required: true },
     name: { type: String, required: true },
@@ -19,4 +19,4 @@ const sauceSchema = mongoose.Schema({
 
 
 
-module.exports = mongoose.model('Sauce', sauceSchema);
+module.exports = mongoose.model('Sauce', sauceSchema); // méthode model transforme en schéma utilisable

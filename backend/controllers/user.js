@@ -1,7 +1,7 @@
 // IMPORTATION DES MODULES
 require('dotenv').config();
-const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
+const bcrypt = require('bcrypt'); //package hash du mot de passe 
+const jwt = require('jsonwebtoken'); //package de création + vérification de token
 
 // IMPORTATION MODELS
 const User = require('../models/User');
@@ -9,7 +9,7 @@ const User = require('../models/User');
 
 // POST inscription
 exports.signup = (req, res, next) => {
-    bcrypt.hash(req.body.password, 10)
+    bcrypt.hash(req.body.password, 10) // Créer un hash du password pour enregistrer dans la DB 
         .then(hash => {
             const user = new User({
                 email: req.body.email,
