@@ -32,9 +32,8 @@ app.use((req, res, next) => {
 // Attribution des middlewares aux routes spécifiques
 app.use('/api/sauces', sauceRoutes); //Routes liées aux sauces
 app.use('/api/auth', userRoutes); //Routes liées à l'authentification
-app.use('/images', express.static(path.join(__dirname, 'images')));
-// Gestion erreur sur endpoint introuvable
-app.use('*', function (req, res) {
+app.use('/images', express.static(path.join(__dirname, 'images'))); // Routes liées aux images
+app.use('*', function (req, res) { // Gestion erreur sur endpoint introuvable
     res.status(404).json({ message: `La page demandée n'existe pas` });
 });
 

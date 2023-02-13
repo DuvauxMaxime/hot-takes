@@ -3,17 +3,17 @@ require('dotenv').config();
 const jwt = require('jsonwebtoken'); //package de création + vérification de token
 
 
-// Authentification
+// Fonction middleware authentification 
 module.exports = (req, res, next) => {
     try {
-        const token = req.headers.authorization.split(' ')[1];
-        const decodedToken = jwt.verify(token, `${process.env.SECRET_KEY}`);
-        const userId = decodedToken.userId;
-        req.auth = {
+        const token = req.headers.authorization.split(' ')[1]; // récupération du token en splitant sur le header
+        const decodedToken = jwt.verify(token, `${process.env.SECRET_KEY}`); // décodage du token avec méthode verify de JWT
+        const userId = decodedToken.userId; // récupération de l'userId
+        req.auth = { // ajout de userId aux requêtes 
             userId: userId
         };
         next();
     } catch (error) {
-        rest.status(401).json({ error })
+        res.status(401).json({ error })
     }
 };
