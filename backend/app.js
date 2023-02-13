@@ -30,8 +30,8 @@ app.use((req, res, next) => {
 
 
 // Attribution des middlewares aux routes spécifiques
-app.use('/api/sauces', sauceRoutes);
-app.use('/api/auth', userRoutes);
+app.use('/api/sauces', sauceRoutes); //Routes liées aux sauces
+app.use('/api/auth', userRoutes); //Routes liées à l'authentification
 app.use('/images', express.static(path.join(__dirname, 'images')));
 // Gestion erreur sur endpoint introuvable
 app.use('*', function (req, res) {
