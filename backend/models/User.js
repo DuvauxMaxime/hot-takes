@@ -10,9 +10,6 @@ const userSchema = mongoose.Schema({
         type: String,
         required: true,
         unique: true, //Limite 1 inscription par mail (quelques cas d'erreurs MongoDB = ajout du package uniqueValidator)
-        validate(v) {
-            if (!validator.isEmail(v)) throw new Error(`Format de l'email non valide`)
-        }
     },
     password: {
         type: String,
