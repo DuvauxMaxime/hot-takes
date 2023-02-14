@@ -2,6 +2,7 @@
 const express = require('express');
 const router = express.Router();
 const limiter = require('../middleware/rate-limite');
+const emailValidator = require('../middleware/email-validator')
 const passwordValidator = require('../middleware/password-validator')
 
 
@@ -10,7 +11,7 @@ const userCtrl = require('../controllers/user')
 
 
 // ROUTES
-router.post('/signup', passwordValidator, userCtrl.signup);
+router.post('/signup', emailValidator, passwordValidator, userCtrl.signup);
 router.post('/login', limiter, userCtrl.login);
 
 
