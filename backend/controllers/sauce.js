@@ -82,7 +82,6 @@ exports.getAllSauces = (req, res, next) => {
 // GET Une seule sauce 
 exports.getOneSauce = (req, res, next) => {
     Sauce.findOne({ _id: req.params.id })
-        // .then(sauce => res.status(200).json(sauce))
         .then(sauce => {
             if (sauce === null) {
                 res.status(404).json({ message: `La sauce n'existe pas !` })
