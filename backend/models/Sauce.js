@@ -1,5 +1,6 @@
 // IMPORTATION DES MODULES
-const mongoose = require('mongoose'); //Package facilitant les interactions avec la DB
+const mongoose = require('mongoose'); //Package facilitant les interactions entre app Express et la DB
+
 
 // Modele de données Sauce
 const sauceSchema = mongoose.Schema({
