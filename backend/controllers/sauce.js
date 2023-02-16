@@ -55,12 +55,12 @@ exports.deleteSauce = async (req, res, next) => {
                 fs.unlink(`images/${filename}`, () => {
                     Sauce.deleteOne({ _id: req.params.id })
                         .then(() => { res.status(200).json({ message: 'Objet supprimé !' }) })
-                        .catch(error => res.status(401).json({ error }));
+                        .catch(error => res.status(500).json({ error }));
                 })
             }
         };
     } catch (error) {
-        res.status(500).json({ error });
+        res.status(404).json({ message: `L'id de la sauce est incorrect` });
     }
 }
 
