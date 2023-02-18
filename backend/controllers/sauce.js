@@ -94,8 +94,8 @@ exports.likeSauce = async (req, res, next) => {
         if (sauce === null) {
             res.status(401).json({ message: `La sauce n'existe pas` });
         } else {
-            // Ajout like = Vérifie si userId n'est pas dans la DB de la sauce et si la requête envoi like = 1
-            if (!sauce.usersLiked.includes(req.body.userId) && req.body.like === 1) {
+            // Ajout like = Vérifie si userId dans aucune DB de la sauce et si la requête envoi like = 1
+            if (!sauce.usersLiked.includes(req.body.userId) && !sauce.usersDisliked.includes(req.body.userId) && req.body.like === 1) {
                 try {
                     await Sauce.updateOne(
                         { _id: req.params.id },
@@ -105,8 +105,7 @@ exports.likeSauce = async (req, res, next) => {
                         }
                     )
                     res.status(201).json({ message: 'Like sauce !' })
-                }
-                catch { (error) => res.status(400).json({ error }) };
+                } catch { (error) => res.status(400).json({ error }) };
             }
             // Annule like = Vérifie si userId est dans la DB et si la requête envoi like = 0
             if (sauce.usersLiked.includes(req.body.userId) && req.body.like === 0) {
@@ -122,8 +121,8 @@ exports.likeSauce = async (req, res, next) => {
                 }
                 catch { (error) => res.status(400).json({ error }) };
             }
-            // Ajout dislike = Vérifie si userId n'est pas dans la DB et si la requête envoi like = -1
-            if (!sauce.usersDisliked.includes(req.body.userId) && req.body.like === -1) {
+            // Ajout dislike = Vérifie si userId dans aucune DB et si la requête envoi like = -1
+            if (!sauce.usersDisliked.includes(req.body.userId) && !sauce.usersLiked.includes(req.body.userId) && req.body.like === -1) {
                 try {
                     await Sauce.updateOne(
                         { _id: req.params.id },
@@ -135,6 +134,28 @@ exports.likeSauce = async (req, res, next) => {
                     res.status(201).json({ message: 'Dislike sauce !' })
                 }
                 catch { (error) => res.status(400).json({ error }) };
+            }
+            // Annule dislike = Vérifie si userId est dans la DB et si la requête envoi like = 0
+            if (sauce.usersDisliked.includes(req.body.userId) && req.body.like === 0) {
+                try {
+                    await Sauce.updateOne(
+                        { _id: req.params.id },
+                        {
+                            $inc: { dislikes: -1 },
+                            $pull: { usersDisliked: req.body.userId } // retire userId dans tableau usersDisliked
+                        }
+                    )
+                    res.status(201).json({ message: 'Annule dislike sauce !' })
+                }
+                catch { (error) => res.status(400).json({ error }) };
+            }
+            // Retourne une erreur si userId dans DB et like = 1
+            if (sauce.usersLiked.includes(req.body.userId) && req.body.like === -1) {
+                res.status(403).json({ message: 'Impossible de liker et disliker en simultané !' })
+            }
+            // Retourne une erreur si userId dans DB et like = 1
+            if (sauce.usersDisliked.includes(req.body.userId) && req.body.like === 1) {
+                res.status(403).json({ message: 'Impossible de liker et disliker en simultané !' })
             }
 
         }
