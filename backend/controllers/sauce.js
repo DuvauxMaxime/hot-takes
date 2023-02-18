@@ -88,12 +88,30 @@ exports.deleteSauce = async (req, res, next) => {
 }
 
 // POST Like sauce
-exports.likeSauce = (req, res, next) => {
-    console.log(req.body);
-    res.status(201).json({
-        message: 'Like sauce !'
-    })
-};
+exports.likeSauce = async (req, res, next) => {
+    try {
+        const sauce = await Sauce.findOne({ _id: req.params.id })
+        if (sauce === null) {
+            res.status(401).json({ message: `La sauce n'existe pas` });
+        } else {
+            // Vérifie si userId n'est pas dans la BD de la sauce et si la requête envoi like = 1
+            if (!sauce.usersLiked.includes(req.body.userId) && req.body.like === 1) {
+                Sauce.updateOne(
+                    { _id: req.params.id },
+                    {
+                        $inc: { likes: 1 },
+                        $push: { userLiked: req.body.userId }
+                    }
+                )
+                    .then(() => res.status(201).json({ message: 'Like sauce !' }))
+                    .catch((error) => res.status(400).json({ error }));
+            }
+
+        }
+    } catch (error) {
+        res.status(404).json({ message: `L'id de la sauce est incorrect` });
+    }
+}
 
 // PUT Modifier une sauce
 exports.editSauce = (req, res, next) => {
