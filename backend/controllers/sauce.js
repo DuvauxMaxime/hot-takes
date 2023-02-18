@@ -100,12 +100,15 @@ exports.likeSauce = async (req, res, next) => {
                     { _id: req.params.id },
                     {
                         $inc: { likes: 1 },
-                        $push: { userLiked: req.body.userId }
+                        $push: { usersLiked: req.body.userId }
                     }
                 )
                     .then(() => res.status(201).json({ message: 'Like sauce !' }))
                     .catch((error) => res.status(400).json({ error }));
             }
+
+
+
 
         }
     } catch (error) {
