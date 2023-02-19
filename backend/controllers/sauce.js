@@ -187,29 +187,80 @@ exports.likeSauce = async (req, res, next) => {
 // };
 
 // PUT Modifier une sauce
-exports.editSauce = async (req, res, next) => {
+exports.editSauce = (req, res, next) => {
+    if (req.file) {
+        Sauce.findOne({ _id: req.params.id })
+            .then((sauce) => {
+                const filename = sauce.imageUrl.split('/images/')[1] // Récupère nom du fichier dans DB
+                console.log(filename);
+                fs.unlink(`images/${filename}`, () => {
+                    Sauce.deleteOne({ _id: req.params.id })
+                        .then(() => { res.status(200).json({ message: 'Fichier supprimé !' }) })
+                        .catch(error => res.status(500).json({ error }));
+                })
+
+            })
+            .catch(error => res.status(404).json({ message: `L'id de la sauce est incorrect` }))
+    } else {
+
+    }
+
     const sauceObject = req.file ? {
         ...JSON.parse(req.body.sauce),
         imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
     } : { ...req.body };
     delete sauceObject._userId;
-    try {
-        const sauce = await Sauce.findOne({ _id: req.params.id })
-        if (sauce.userId != req.auth.userId) {
-            res.status(401).json({ message: 'Non autorisé' });
-        } else {
-            try {
-                await Sauce.updateOne({ _id: req.params.id }, { ...sauceObject, _id: req.params.id })
-                res.status(200).json({ message: 'Objet modifié!' })
+    Sauce.findOne({ _id: req.params.id })
+        .then((sauce) => {
+            if (sauce.userId != req.auth.userId) {
+                res.status(401).json({ message: 'Non autorisé' });
+            } else {
+                Sauce.updateOne({ _id: req.params.id }, { ...sauceObject, _id: req.params.id })
+                    .then(() => res.status(200).json({ message: 'Objet modifié!' }))
+                    .catch(error => res.status(401).json({ error }));
             }
-            catch { (error) => res.status(401).json({ error }) }
-        }
-    } catch {
-        ((error) => {
-            res.status(400).json({ error });
         })
-    }
+        .catch((error) => {
+            res.status(400).json({ error });
+        });
 };
+
+// // PUT Modifier une sauce
+// exports.editSauce = async (req, res, next) => {
+
+//     const sauceObject = req.file ? {
+//         ...JSON.parse(req.body.sauce),
+//         imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
+//     } : { ...req.body };
+//     delete sauceObject._userId;
+//     try {
+//         const sauce = await Sauce.findOne({ _id: req.params.id })
+//         if (sauce.userId != req.auth.userId) {
+//             res.status(401).json({ message: 'Non autorisé' });
+//         } else {
+//             try {
+
+//                 if (req.file != undefined) {
+//                     const filename = await sauce.imageUrl.split('/images/')[1];
+//                     console.log(sauce);
+//                     await fs.unlink(`images/${filename}`, async () => {
+//                         await Sauce.updateOne({ _id: req.params.id })
+//                             .then(() => { res.status(200).json({ message: 'Image supprimé et sauce modifiée !' }) })
+//                             .catch(error => res.status(500).json({ error }));
+//                     })
+//                 } else {
+//                     await Sauce.updateOne({ _id: req.params.id }, { ...sauceObject, _id: req.params.id })
+//                     res.status(200).json({ message: 'Sauce modifiée!' })
+//                 }
+//             }
+//             catch { (error) => res.status(401).json({ error }) }
+//         }
+//     } catch {
+//         ((error) => {
+//             res.status(400).json({ error });
+//         })
+//     }
+// };
 
 //GET Toutes les sauces
 exports.getAllSauces = (req, res, next) => {
