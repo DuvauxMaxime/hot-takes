@@ -124,7 +124,7 @@ exports.likeSauce = async (req, res, next) => {
                         }
                     )
                     res.status(201).json({ message: 'Like sauce !' })
-                } catch { (error) => res.status(400).json({ error }) };
+                } catch (error) { res.status(400).json({ error }) };
             }
             // Annule like = Vérifie si userId est dans la DB et si la requête envoi like = 0
             if (sauce.usersLiked.includes(req.body.userId) && req.body.like === 0) {
@@ -138,7 +138,7 @@ exports.likeSauce = async (req, res, next) => {
                     )
                     res.status(201).json({ message: 'Annule like sauce !' })
                 }
-                catch { (error) => res.status(400).json({ error }) };
+                catch (error) { res.status(400).json({ error }) };
             }
             // Ajout dislike = Vérifie si userId dans aucune DB et si la requête envoi like = -1
             if (!sauce.usersDisliked.includes(req.body.userId) && !sauce.usersLiked.includes(req.body.userId) && req.body.like === -1) {
@@ -152,7 +152,7 @@ exports.likeSauce = async (req, res, next) => {
                     )
                     res.status(201).json({ message: 'Dislike sauce !' })
                 }
-                catch { (error) => res.status(400).json({ error }) };
+                catch (error) { res.status(400).json({ error }) };
             }
             // Annule dislike = Vérifie si userId est dans la DB et si la requête envoi like = 0
             if (sauce.usersDisliked.includes(req.body.userId) && req.body.like === 0) {
@@ -166,17 +166,28 @@ exports.likeSauce = async (req, res, next) => {
                     )
                     res.status(201).json({ message: 'Annule dislike sauce !' })
                 }
-                catch { (error) => res.status(400).json({ error }) };
+                catch (error) { res.status(400).json({ error }) };
             }
-            // Retourne une erreur si userId dans DB et like = 1
+            // Retourne une erreur si userId dans DB Liked et like = 1
             if (sauce.usersLiked.includes(req.body.userId) && req.body.like === -1) {
-                res.status(403).json({ message: 'Impossible de liker et disliker en simultané !' })
+                res.status(403).json({ message: 'Impossible de liker et disliker en simultané !' });
             }
-            // Retourne une erreur si userId dans DB et like = 1
+            // Retourne une erreur si userId dans DB Disliked et like = 1
             if (sauce.usersDisliked.includes(req.body.userId) && req.body.like === 1) {
-                res.status(403).json({ message: 'Impossible de liker et disliker en simultané !' })
+                res.status(403).json({ message: 'Impossible de liker et disliker en simultané !' });
             }
-
+            // Retourne une erreur si userId dans DB Liked et like = 1
+            if (sauce.usersLiked.includes(req.body.userId) && req.body.like === 1) {
+                res.status(403).json({ message: 'Impossible de liker plusieurs fois une même sauce !' });
+            }
+            // Retourne une erreur si userId dans DB Disliked et like = 1
+            if (sauce.usersDisliked.includes(req.body.userId) && req.body.like === -1) {
+                res.status(403).json({ message: 'Impossible de disliker plusieurs fois une même sauce !' });
+            }
+            // Retourne une erreur si userId dans DB Disliked et like = 1
+            if (!sauce.usersDisliked.includes(req.body.userId) && !sauce.usersDisliked.includes(req.body.userId) && req.body.like === 0) {
+                res.status(403).json({ message: `Impossible d'annuler une sauce qui n'est ni liker ni disliker !` });
+            }
         }
     } catch (error) {
         res.status(404).json({ message: `L'id de la sauce est incorrect` });
