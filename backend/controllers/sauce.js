@@ -242,14 +242,15 @@ exports.getAllSauces = async (req, res, next) => {
 };
 
 // GET Une seule sauce 
-exports.getOneSauce = (req, res, next) => {
-    Sauce.findOne({ _id: req.params.id })
-        .then(sauce => {
-            if (sauce === null) {
-                res.status(404).json({ message: `La sauce n'existe pas !` })
-            } else {
-                res.status(200).json(sauce)
-            }
-        })
-        .catch(error => res.status(404).json({ message: `L'id de la sauce est incorrect` }));
+exports.getOneSauce = async (req, res, next) => {
+    try {
+        const sauce = await Sauce.findOne({ _id: req.params.id });
+        if (sauce === null) {
+            res.status(404).json({ message: `La sauce n'existe pas !` });
+        } else {
+            res.status(200).json(sauce);
+        }
+    } catch (error) {
+        res.status(404).json({ message: `L'id de la sauce est incorrect` });
+    }
 };
