@@ -263,12 +263,11 @@ exports.editSauce = async (req, res, next) => {
 //GET Toutes les sauces
 exports.getAllSauces = async (req, res, next) => {
     try {
-
         const sauces = await Sauce.find();
-        if (sauces.length === 0) {
-            res.status(200).json({ message: `La base de données ne contient pas de sauce!` });
-        }
         res.status(200).json(sauces);
+        // if (sauces.length === 0) {
+        //     res.status(200).json({ message: `La base de données ne contient pas de sauce!` });
+        // }
     } catch (error) {
         res.status(400).json({ error });
     }
