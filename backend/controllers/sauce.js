@@ -94,10 +94,13 @@ exports.deleteSauce = async (req, res, next) => {
                 res.status(401).json({ message: 'Non autorisé' });
             } else {
                 const filename = sauce.imageUrl.split('/images/')[1];
-                fs.unlink(`images/${filename}`, () => {
-                    Sauce.deleteOne({ _id: req.params.id })
-                        .then(() => { res.status(200).json({ message: 'Objet supprimé !' }) })
-                        .catch(error => res.status(500).json({ error }));
+                fs.unlink(`images/${filename}`, async () => {
+                    await Sauce.deleteOne({ _id: req.params.id })
+                    try {
+                        res.status(200).json({ message: 'Objet supprimé !' });
+                    } catch (error) {
+                        res.status(500).json({ error });
+                    }
                 })
             }
         };
