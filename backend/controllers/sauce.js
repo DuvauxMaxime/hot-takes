@@ -231,13 +231,14 @@ exports.editSauce = async (req, res, next) => {
     }
 };
 
-
-
 //GET Toutes les sauces
-exports.getAllSauces = (req, res, next) => {
-    Sauce.find()
-        .then(sauces => res.status(200).json(sauces))
-        .catch(error => res.status(400).json({ error }))
+exports.getAllSauces = async (req, res, next) => {
+    try {
+        const sauces = await Sauce.find();
+        res.status(200).json(sauces);
+    } catch (error) {
+        res.status(400).json({ error });
+    }
 };
 
 // GET Une seule sauce 
