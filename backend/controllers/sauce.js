@@ -86,7 +86,7 @@ exports.createSauce = async (req, res, next) => {
 // DELETE Suppression d'une sauce
 exports.deleteSauce = async (req, res, next) => {
     try {
-        const sauce = await Sauce.findOne({ _id: req.params.id })
+        const sauce = await Sauce.findOne({ _id: req.params.id });
         if (sauce === null) {
             res.status(401).json({ message: `La sauce n'existe pas` });
         } else {
@@ -109,7 +109,7 @@ exports.deleteSauce = async (req, res, next) => {
 // POST Like sauce
 exports.likeSauce = async (req, res, next) => {
     try {
-        const sauce = await Sauce.findOne({ _id: req.params.id })
+        const sauce = await Sauce.findOne({ _id: req.params.id });
         if (sauce === null) {
             res.status(401).json({ message: `La sauce n'existe pas` });
         } else {
@@ -123,7 +123,7 @@ exports.likeSauce = async (req, res, next) => {
                             $push: { usersLiked: req.body.userId } // ajoute userId dans tableau usersLiked
                         }
                     )
-                    res.status(201).json({ message: 'Like sauce !' })
+                    res.status(201).json({ message: 'Like sauce !' });
                 } catch (error) { res.status(400).json({ error }) };
             }
             // Annule like = Vérifie si userId est dans la DB et si la requête envoi like = 0
@@ -136,7 +136,7 @@ exports.likeSauce = async (req, res, next) => {
                             $pull: { usersLiked: req.body.userId } // retire userId dans tableau usersLiked
                         }
                     )
-                    res.status(201).json({ message: 'Annule like sauce !' })
+                    res.status(201).json({ message: 'Annule like sauce !' });
                 }
                 catch (error) { res.status(400).json({ error }) };
             }
@@ -164,7 +164,7 @@ exports.likeSauce = async (req, res, next) => {
                             $pull: { usersDisliked: req.body.userId } // retire userId dans tableau usersDisliked
                         }
                     )
-                    res.status(201).json({ message: 'Annule dislike sauce !' })
+                    res.status(201).json({ message: 'Annule dislike sauce !' });
                 }
                 catch (error) { res.status(400).json({ error }) };
             }
