@@ -22,5 +22,4 @@ const storage = multer.diskStorage({ //fonction pour enregistrer sur le disk
 });
 
 
-
 module.exports = multer({ storage }).single('image'); // Méthode single pour préciser que c'est un fichier image unique
