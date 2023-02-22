@@ -13,7 +13,7 @@ const sauceCtrl = require('../controllers/sauce');
 // ROUTES
 router.post('/', auth, multer, dataValidator, sauceCtrl.createSauce);
 router.post('/:id/like', auth, sauceCtrl.likeSauce);
-router.put('/:id', auth, multer, sauceCtrl.editSauce);
+router.put('/:id', auth, multer, dataValidator, sauceCtrl.editSauce);
 router.delete('/:id', auth, sauceCtrl.deleteSauce);
 router.get('/:id', auth, sauceCtrl.getOneSauce);
 router.get('/', auth, sauceCtrl.getAllSauces);
