@@ -38,29 +38,29 @@ exports.createSauce = async (req, res, next) => {
     });
     try {
         await sauce.save();
-        res.status(201).json({ message: 'Sauce enregistrée !' })
+        res.status(201).json({ message: 'Sauce enregistrée !' });
     } catch (error) {
         if (!sauce.name) {
-            res.status(400).json({ message: ` La donnée name est requise.` })
-        }
+            res.status(400).json({ message: ` La donnée name est requise.` });
+        };
         if (!sauce.manufacturer) {
-            res.status(400).json({ message: ` La donnée manufacturer est requise.` })
-        }
+            res.status(400).json({ message: ` La donnée manufacturer est requise.` });
+        };
         if (!sauce.description) {
-            res.status(400).json({ message: ` La donnée description est requise.` })
-        }
+            res.status(400).json({ message: ` La donnée description est requise.` });
+        };
         if (!sauce.mainPepper) {
-            res.status(400).json({ message: ` La donnée mainPepper est requise.` })
-        }
+            res.status(400).json({ message: ` La donnée mainPepper est requise.` });
+        };
         if (!sauce.imageUrl) {
-            res.status(400).json({ message: ` La donnée imageUrl est requise.` })
-        }
+            res.status(400).json({ message: ` La donnée imageUrl est requise.` });
+        };
         if (!sauce.heat) {
-            res.status(400).json({ message: ` La donnée heat est requise.` })
+            res.status(400).json({ message: ` La donnée heat est requise.` });
         } else {
-            res.status(400).json({ error })
-        }
-    }
+            res.status(400).json({ error });
+        };
+    };
 };
 
 // DELETE Suppression d'une sauce
