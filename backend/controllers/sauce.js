@@ -122,7 +122,7 @@ exports.likeSauce = async (req, res, next) => {
                     await Sauce.updateOne(
                         { _id: req.params.id },
                         {
-                            $inc: { likes: 1 },
+                            $inc: { likes: 1 }, // incrémente de 1 la valeur like
                             $push: { usersLiked: req.body.userId } // ajoute userId dans tableau usersLiked
                         }
                     )
@@ -135,7 +135,7 @@ exports.likeSauce = async (req, res, next) => {
                     await Sauce.updateOne(
                         { _id: req.params.id },
                         {
-                            $inc: { likes: -1 },
+                            $inc: { likes: -1 }, // décrémente de 1 la valeur like
                             $pull: { usersLiked: req.body.userId } // retire userId dans tableau usersLiked
                         }
                     )
@@ -149,7 +149,7 @@ exports.likeSauce = async (req, res, next) => {
                     await Sauce.updateOne(
                         { _id: req.params.id },
                         {
-                            $inc: { dislikes: 1 },
+                            $inc: { dislikes: 1 }, // incrémente de 1 la valeur dislike
                             $push: { usersDisliked: req.body.userId } // retire userId dans tableau usersDisliked
                         }
                     )
@@ -163,7 +163,7 @@ exports.likeSauce = async (req, res, next) => {
                     await Sauce.updateOne(
                         { _id: req.params.id },
                         {
-                            $inc: { dislikes: -1 },
+                            $inc: { dislikes: -1 }, // décrémente de 1 la valeur dislike
                             $pull: { usersDisliked: req.body.userId } // retire userId dans tableau usersDisliked
                         }
                     )
