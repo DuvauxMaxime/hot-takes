@@ -12,8 +12,6 @@ const MIME_TYPES = {
 
 module.exports = (req, res, next) => {
     const data = JSON.parse(req.body.sauce)
-    console.log('========> DATA HEAT');
-    console.log(parseInt(data.heat.value));
     if (!validator.matches(data.name.trim(), /^[a-zA-ZáàâäãåçéèêëíìîïñóòôöõúùûüýÿæœÁÀÂÄÃÅÇÉÈÊËÍÌÎÏÑÓÒÔÖÕÚÙÛÜÝŸÆŒ.\-\,]*$/) || data.name.trim().length === 0) {
         return res.status(400).json({ message: `La data name ne correspond pas au format attendu. (La data doit contenir au moins 1 caractère alphanumérique)` });
     } if (!validator.matches(data.manufacturer.trim(), /^[a-zA-ZáàâäãåçéèêëíìîïñóòôöõúùûüýÿæœÁÀÂÄÃÅÇÉÈÊËÍÌÎÏÑÓÒÔÖÕÚÙÛÜÝŸÆŒ.\-\,]*$/) || data.manufacturer.trim().length === 0) {

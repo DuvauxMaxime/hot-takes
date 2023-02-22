@@ -15,11 +15,11 @@ module.exports = (req, res, next) => {
         next();
     } catch (error) {
         if (req.headers.authorization === undefined) {
-            res.status(401).json({ message: `Le token d'authentification est absent` });
+            return res.status(401).json({ message: `Le token d'authentification est absent` });
         };
         if (req.headers.authorization.length != 183) {
-            res.status(401).json({ message: `Le token d'authentification est incorrect` });
+            return res.status(401).json({ message: `Le token d'authentification est incorrect` });
         };
-        res.status(401).json({ error });
+        return res.status(401).json({ error });
     }
 };

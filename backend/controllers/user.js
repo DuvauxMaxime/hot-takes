@@ -27,14 +27,14 @@ exports.login = (req, res, next) => {
     User.findOne({ email: req.body.email }) // Objet qui sert de filtre
         .then(user => {
             if (user === null) { // Vérifie si l'utilisateur existe dans la DB
-                res.status(401).json({ message: 'Utilisateur/Mot de passe erroné' });
+                return res.status(401).json({ message: 'Utilisateur/Mot de passe erroné' });
             } else { // Si l'utilisateur existe dans la DB
                 bcrypt.compare(req.body.password, user.password) //Méthode pour comparer le mot de passe tranmis au hash de la DB
                     .then(valid => {
                         if (!valid) { // Si False = password erroné 
-                            res.status(401).json({ message: 'Utilisateur/Mot de passe erroné' });
+                            return res.status(401).json({ message: 'Utilisateur/Mot de passe erroné' });
                         } else { // Si password correct 
-                            res.status(200).json({
+                            return res.status(200).json({
                                 userId: user._id,
                                 token: jwt.sign( // Méthode pour chiffrer un nouveau token de JWT avec 3 arguments
                                     { userId: user._id }, // identifiant utilisateur
@@ -45,10 +45,10 @@ exports.login = (req, res, next) => {
                         }
                     })
                     .catch(error => {
-                        res.status(500).json({ error });
+                        return res.status(500).json({ error });
                     });
             }
         })
-        .catch(error => res.status(500).json({ error }));
+        .catch(error => { return res.status(500).json({ error }) });
 
 };

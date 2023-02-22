@@ -34,7 +34,7 @@ app.use('/api/sauces', sauceRoutes); //Routes liées aux sauces
 app.use('/api/auth', userRoutes); //Routes liées à l'authentification
 app.use('/images', express.static(path.join(__dirname, 'images'))); // Routes liées aux images
 app.use('*', function (req, res) { // Gestion erreur sur endpoint introuvable
-    res.status(404).json({ message: `La page demandée n'existe pas` });
+    return res.status(404).json({ message: `La page demandée n'existe pas` });
 });
 
 
