@@ -4,7 +4,7 @@ const multer = require('multer'); // Package facilitant la gestion de fichiers a
 // Dictionnaire des extensions de fichier
 const MIME_TYPES = {
     'image/jpg': 'jpg',
-    'image/jpeg': 'jpg',
+    'image/jpeg': 'jpeg',
     'image/png': 'png'
 };
 
