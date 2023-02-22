@@ -38,27 +38,29 @@ exports.createSauce = async (req, res, next) => {
     });
     try {
         await sauce.save();
-        res.status(201).json({ message: 'Sauce enregistrée !' });
+        return res.status(201).json({ message: 'Sauce enregistrée !' });
     } catch (error) {
-        if (!sauce.name) {
-            res.status(400).json({ message: ` La donnée name est requise.` });
+        console.log("========> TRIMMMMMM");
+        console.log(sauce.name.trim().length);
+        if (!sauce.name || sauce.name.trim().length === 0) {
+            return res.status(400).json({ message: ` La donnée name est requise. (La data ne peut être vide)` });
         };
         if (!sauce.manufacturer) {
-            res.status(400).json({ message: ` La donnée manufacturer est requise.` });
+            return res.status(400).json({ message: ` La donnée manufacturer est requise. (La data ne peut être vide)` });
         };
         if (!sauce.description) {
-            res.status(400).json({ message: ` La donnée description est requise.` });
+            return res.status(400).json({ message: ` La donnée description est requise. (La data ne peut être vide)` });
         };
         if (!sauce.mainPepper) {
-            res.status(400).json({ message: ` La donnée mainPepper est requise.` });
+            return res.status(400).json({ message: ` La donnée mainPepper est requise. (La data ne peut être vide)` });
         };
         if (!sauce.imageUrl) {
-            res.status(400).json({ message: ` La donnée imageUrl est requise.` });
+            return res.status(400).json({ message: ` La donnée imageUrl est requise. (La data ne peut être vide)` });
         };
         if (!sauce.heat) {
-            res.status(400).json({ message: ` La donnée heat est requise.` });
+            return res.status(400).json({ message: ` La donnée heat est requise. (La data ne peut être vide)` });
         } else {
-            res.status(400).json({ error });
+            return res.status(400).json({ error });
         };
     };
 };
@@ -235,7 +237,8 @@ exports.editSauce = async (req, res, next) => {
     try {
         const sauce = await Sauce.findOne({ _id: req.params.id });
         if (sauce === null) {
-            res.status(404).json({ message: `La sauce n'existe pas !` });
+            return res.status(404).json({ message: `La sauce n'existe pas !` });
+
         } else {
             if (req.file) {
                 try {
@@ -245,7 +248,8 @@ exports.editSauce = async (req, res, next) => {
                         if (error) throw error;
                     })
                 } catch (error) {
-                    res.status(404).json({ message: `L'id de la sauce est incorrect` });
+                    return res.status(404).json({ message: `L'id de la sauce est incorrect` });
+
                 }
             }
             const sauceObject = req.file ? {
@@ -256,21 +260,24 @@ exports.editSauce = async (req, res, next) => {
             try {
                 const sauce = await Sauce.findOne({ _id: req.params.id });
                 if (sauce.userId != req.auth.userId) {
-                    res.status(401).json({ message: 'Non autorisé' });
+                    return res.status(401).json({ message: 'Non autorisé' });
+
                 } else {
                     try {
                         await Sauce.updateOne({ _id: req.params.id }, { ...sauceObject, _id: req.params.id })
-                        res.status(200).json({ message: 'Objet modifié!' })
+                        return res.status(200).json({ message: 'Objet modifié!' })
+
                     } catch (error) {
-                        res.status(401).json({ error });
+                        return res.status(401).json({ error });
+
                     }
                 }
             } catch (error) {
-                res.status(400).json({ error });
+                return res.status(400).json({ error });
             }
         }
     } catch (error) {
-        res.status(404).json({ message: `L'id de la sauce est incorrect` });
+        return res.status(404).json({ message: `L'id de la sauce est incorrect` });
     }
 };
 
