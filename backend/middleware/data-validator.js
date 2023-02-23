@@ -27,7 +27,9 @@ module.exports = (req, res, next) => {
     } if (data.mainPepper.trim().length === 0) {
         return res.status(400).json({ message: `La data mainPepper ne peut être vide` });
     } if (parseInt(data.heat) > 10 || parseInt(data.heat) < 1) {
-        return res.status(400).json({ message: `La data heat doit être comprise entre 1 et 10. (La data ne peut être vide)` });
+        return res.status(400).json({ message: `La data heat doit être comprise entre 1 et 10.` });
+    } if (data.heat.trim().length === 0) {
+        return res.status(400).json({ message: `La data heat ne peut être vide.` });
     } if (req.file != undefined) {
         const extension = req.file.mimetype.split('/')[1]; // Défini l'extension d'après le dictionnaire MIME TYPES
         const tabExtension = Object.keys(MIME_TYPES).map(cle => {
