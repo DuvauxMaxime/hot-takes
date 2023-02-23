@@ -16,7 +16,9 @@ module.exports = (req, res, next) => {
         data = req.body
     } if (typeof req.body.sauce === 'string') {
         data = JSON.parse(req.body.sauce)
-    } if (data.name.trim().length === 0) {
+    }
+    console.log(data);
+    if (data.name.trim().length === 0) {
         return res.status(400).json({ message: `La data name ne peut être vide` });
     } if (data.manufacturer.trim().length === 0) {
         return res.status(400).json({ message: `La data manufacturer ne peut être vide` });
