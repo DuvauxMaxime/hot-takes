@@ -35,8 +35,8 @@ module.exports = (req, res, next) => {
         if (tabExtension.includes(extension) === false) {
             return res.status(400).json({ message: `Le format du fichier n'est pas pris en charge ! Seuls les fichiers jpg, jpeg ou png sont acceptés.` })
         }
-        next();
-    } else {
+    }
+    else {
         next();
     }
 }
