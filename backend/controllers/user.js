@@ -8,29 +8,33 @@ const User = require('../models/User');
 
 
 // POST inscription
-exports.signup = (req, res, next) => {
-    bcrypt.hash(req.body.password, 10) // Fonction créer un hash du password pour enregistrer dans la DB + salt = 10 tours
-        .then(hash => {
+exports.signup = async (req, res, next) => {
+    try {
+        const hash = await bcrypt.hash(req.body.password, 10) // Fonction créer un hash du password pour enregistrer dans la DB + salt = 10 tours
             const user = new User({
                 email: req.body.email,
                 password: hash
             });
-            user.save()
-                .then(() => res.status(201).json({ message: 'Utilisateur créé !' }))
-                .catch(error => res.status(400).json({ message: 'Vous possédez déjà un compte Hot Takes !' }));
-        })
-        .catch(error => res.status(500).json({ error }));
+            try{
+                await user.save()
+                return res.status(201).json({ message: 'Utilisateur créé !' })
+            } catch{
+                return res.status(400).json({ message: 'Vous possédez déjà un compte Hot Takes !' })
+            };
+        } catch(error) {
+            return res.status(500).json({ error })
+        };
 };
 
 // POST connection 
-exports.login = (req, res, next) => {
-    User.findOne({ email: req.body.email }) // Objet qui sert de filtre
-        .then(user => {
+exports.login = async (req, res, next) => {
+        try{
+            const user = await User.findOne({ email: req.body.email }) // Objet qui sert de filtre
             if (user === null) { // Vérifie si l'utilisateur existe dans la DB
                 return res.status(401).json({ message: 'Utilisateur/Mot de passe erroné' });
             } else { // Si l'utilisateur existe dans la DB
-                bcrypt.compare(req.body.password, user.password) //Méthode pour comparer le mot de passe tranmis au hash de la DB
-                    .then(valid => {
+                    try {
+                        const valid = await bcrypt.compare(req.body.password, user.password) //Méthode pour comparer le mot de passe tranmis au hash de la DB
                         if (!valid) { // Si False = password erroné 
                             return res.status(401).json({ message: 'Utilisateur/Mot de passe erroné' });
                         } else { // Si password correct 
@@ -43,12 +47,12 @@ exports.login = (req, res, next) => {
                                 )
                             });
                         }
-                    })
-                    .catch(error => {
+                    } catch(error) {
                         return res.status(500).json({ error });
-                    });
+                    };
             }
-        })
-        .catch(error => { return res.status(500).json({ error }) });
+        } catch(error) { 
+            return res.status(500).json({ error }) 
+        };
 
 };
