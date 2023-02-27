@@ -11,13 +11,14 @@ const MIME_TYPES = {
 };
 
 
-module.exports = (req, res, next) => {
+module.exports = async (req, res, next) => {
+
     let data
     if (req.body.sauce === undefined) {
         data = req.body
     } if (typeof req.body.sauce === 'string') {
         data = JSON.parse(req.body.sauce)
-    } if (data.name.trim().length === 0) {
+    } if (data.name === undefined || data.name.trim().length === 0) {
         if (req.file != undefined) {
             const filename = req.file.filename;
             fs.unlink(`images/${filename}`, (error => {
@@ -28,8 +29,8 @@ module.exports = (req, res, next) => {
                 }
             }))
         }
-        return res.status(400).json({ message: `La data name ne peut être vide` });
-    } if (data.manufacturer.trim().length === 0) {
+        return res.status(400).json({ message: `La data name ne peut être vide ou absente.` });
+    } if (data.manufacturer === undefined || data.manufacturer.trim().length === 0) {
         if (req.file != undefined) {
             const filename = req.file.filename;
             fs.unlink(`images/${filename}`, (error => {
@@ -40,8 +41,8 @@ module.exports = (req, res, next) => {
                 }
             }))
         }
-        return res.status(400).json({ message: `La data manufacturer ne peut être vide` });
-    } if (data.description.trim().length === 0) {
+        return res.status(400).json({ message: `La data manufacturer ne peut être vide ou absente.` });
+    } if (data.description === undefined || data.description.trim().length === 0) {
         if (req.file != undefined) {
             const filename = req.file.filename;
             fs.unlink(`images/${filename}`, (error => {
@@ -52,8 +53,8 @@ module.exports = (req, res, next) => {
                 }
             }))
         }
-        return res.status(400).json({ message: `La data description ne peut être vide` });
-    } if (data.mainPepper.trim().length === 0) {
+        return res.status(400).json({ message: `La data description ne peut être vide ou absente.` });
+    } if (data.mainPepper === undefined || data.mainPepper.trim().length === 0) {
         if (req.file != undefined) {
             const filename = req.file.filename;
             fs.unlink(`images/${filename}`, (error => {
@@ -64,7 +65,7 @@ module.exports = (req, res, next) => {
                 }
             }))
         }
-        return res.status(400).json({ message: `La data mainPepper ne peut être vide` });
+        return res.status(400).json({ message: `La data mainPepper ne peut être vide ou absente.` });
     } if (parseInt(data.heat) > 10 || parseInt(data.heat) < 1) {
         if (req.file != undefined) {
             const filename = req.file.filename;
@@ -77,7 +78,7 @@ module.exports = (req, res, next) => {
             }))
         }
         return res.status(400).json({ message: `La data heat doit être comprise entre 1 et 10.` });
-    } if (data.heat.toString().trim().length === 0) {
+    } if (data.heat === undefined || data.heat.toString().trim().length === 0) {
         if (req.file != undefined) {
             const filename = req.file.filename;
             fs.unlink(`images/${filename}`, (error => {
@@ -88,7 +89,7 @@ module.exports = (req, res, next) => {
                 }
             }))
         }
-        return res.status(400).json({ message: `La data heat ne peut être vide.` });
+        return res.status(400).json({ message: `La data heat ne peut être vide ou absente.` });
     } if (req.file != undefined) {
         const extension = req.file.mimetype.split('/')[1]; // Défini l'extension d'après le dictionnaire MIME TYPES
         const tabExtension = Object.keys(MIME_TYPES).map(cle => {
@@ -107,6 +108,7 @@ module.exports = (req, res, next) => {
         }
     }
     next();
+
 }
 
 
