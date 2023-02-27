@@ -80,85 +80,90 @@ exports.likeSauce = async (req, res, next) => {
         if (sauce === null) {
             return res.status(401).json({ message: `La sauce n'existe pas` });
         } else {
-            if (sauce.userId != req.auth.userId) {
-                return res.status(401).json({ message: 'Non autorisé' });
-            } else {
-                // Ajout like = Vérifie si userId dans aucune DB de la sauce et si la requête envoi like = 1
-                if (!sauce.usersLiked.includes(req.auth.userId) && !sauce.usersDisliked.includes(req.auth.userId) && req.body.like === 1) {
-                    try {
-                        await Sauce.updateOne(
-                            { _id: req.params.id },
-                            {
-                                $inc: { likes: 1 }, // incrémente de 1 la valeur like
-                                $push: { usersLiked: req.auth.userId } // ajoute userId dans tableau usersLiked
-                            }
-                        )
-                        return res.status(201).json({ message: 'Like sauce !' });
-                    } catch (error) { res.status(400).json({ error }) };
-                }
-                // Annule like = Vérifie si userId est dans la DB et si la requête envoi like = 0
-                if (sauce.usersLiked.includes(req.auth.userId) && req.body.like === 0) {
-                    try {
-                        await Sauce.updateOne(
-                            { _id: req.params.id },
-                            {
-                                $inc: { likes: -1 }, // décrémente de 1 la valeur like
-                                $pull: { usersLiked: req.auth.userId } // retire userId dans tableau usersLiked
-                            }
-                        )
-                        return res.status(201).json({ message: 'Annule like sauce !' });
-                    }
-                    catch (error) { res.status(400).json({ error }) };
-                }
-                // Ajout dislike = Vérifie si userId dans aucune DB et si la requête envoi like = -1
-                if (!sauce.usersDisliked.includes(req.auth.userId) && !sauce.usersLiked.includes(req.auth.userId) && req.body.like === -1) {
-                    try {
-                        await Sauce.updateOne(
-                            { _id: req.params.id },
-                            {
-                                $inc: { dislikes: 1 }, // incrémente de 1 la valeur dislike
-                                $push: { usersDisliked: req.auth.userId } // retire userId dans tableau usersDisliked
-                            }
-                        )
-                        return res.status(201).json({ message: 'Dislike sauce !' })
-                    }
-                    catch (error) { res.status(400).json({ error }) };
-                }
-                // Annule dislike = Vérifie si userId est dans la DB et si la requête envoi like = 0
-                if (sauce.usersDisliked.includes(req.auth.userId) && req.body.like === 0) {
-                    try {
-                        await Sauce.updateOne(
-                            { _id: req.params.id },
-                            {
-                                $inc: { dislikes: -1 }, // décrémente de 1 la valeur dislike
-                                $pull: { usersDisliked: req.auth.userId } // retire userId dans tableau usersDisliked
-                            }
-                        )
-                        return res.status(201).json({ message: 'Annule dislike sauce !' });
-                    }
-                    catch (error) { res.status(400).json({ error }) };
-                }
-                // Retourne une erreur si userId dans DB Liked et like = 1
-                if (sauce.usersLiked.includes(req.auth.userId) && req.body.like === -1) {
-                    return res.status(403).json({ message: 'Impossible de liker et disliker en simultané !' });
-                }
-                // Retourne une erreur si userId dans DB Disliked et like = 1
-                if (sauce.usersDisliked.includes(req.auth.userId) && req.body.like === 1) {
-                    return res.status(403).json({ message: 'Impossible de liker et disliker en simultané !' });
-                }
-                // Retourne une erreur si userId dans DB Liked et like = 1
-                if (sauce.usersLiked.includes(req.auth.userId) && req.body.like === 1) {
-                    return res.status(403).json({ message: 'Impossible de liker plusieurs fois une même sauce !' });
-                }
-                // Retourne une erreur si userId dans DB Disliked et like = 1
-                if (sauce.usersDisliked.includes(req.auth.userId) && req.body.like === -1) {
-                    return res.status(403).json({ message: 'Impossible de disliker plusieurs fois une même sauce !' });
-                }
-                // Retourne une erreur si userId dans DB Disliked et like = 1
-                if (!sauce.usersDisliked.includes(req.auth.userId) && !sauce.usersDisliked.includes(req.auth.userId) && req.body.like === 0) {
-                    return res.status(403).json({ message: `Impossible d'annuler une sauce qui n'est ni liker ni disliker !` });
-                }
+            // Ajout like = Vérifie si userId dans aucune DB de la sauce et si la requête envoi like = 1
+            if (!sauce.usersLiked.includes(req.auth.userId) && !sauce.usersDisliked.includes(req.auth.userId) && req.body.like === 1) {
+                try {
+                    await Sauce.updateOne(
+                        { _id: req.params.id },
+                        {
+                            $inc: { likes: 1 }, // incrémente de 1 la valeur like
+                            $push: { usersLiked: req.auth.userId } // ajoute userId dans tableau usersLiked
+                        }
+                    )
+                    return res.status(201).json({ message: 'Like sauce !' });
+                } catch (error) { res.status(400).json({ error }) };
             }
+            // Annule like = Vérifie si userId est dans la DB et si la requête envoi like = 0
+            if (sauce.usersLiked.includes(req.auth.userId) && req.body.like === 0) {
+                try {
+                    await Sauce.updateOne(
+                        { _id: req.params.id },
+                        {
+                            $inc: { likes: -1 }, // décrémente de 1 la valeur like
+                            $pull: { usersLiked: req.auth.userId } // retire userId dans tableau usersLiked
+                        }
+                    )
+                    return res.status(201).json({ message: 'Annule like sauce !' });
+                }
+                catch (error) { res.status(400).json({ error }) };
+            }
+            // Ajout dislike = Vérifie si userId dans aucune DB et si la requête envoi like = -1
+            if (!sauce.usersDisliked.includes(req.auth.userId) && !sauce.usersLiked.includes(req.auth.userId) && req.body.like === -1) {
+                try {
+                    await Sauce.updateOne(
+                        { _id: req.params.id },
+                        {
+                            $inc: { dislikes: 1 }, // incrémente de 1 la valeur dislike
+                            $push: { usersDisliked: req.auth.userId } // retire userId dans tableau usersDisliked
+                        }
+                    )
+                    return res.status(201).json({ message: 'Dislike sauce !' })
+                }
+                catch (error) { res.status(400).json({ error }) };
+            }
+            // Annule dislike = Vérifie si userId est dans la DB et si la requête envoi like = 0
+            if (sauce.usersDisliked.includes(req.auth.userId) && req.body.like === 0) {
+                try {
+                    await Sauce.updateOne(
+                        { _id: req.params.id },
+                        {
+                            $inc: { dislikes: -1 }, // décrémente de 1 la valeur dislike
+                            $pull: { usersDisliked: req.auth.userId } // retire userId dans tableau usersDisliked
+                        }
+                    )
+                    return res.status(201).json({ message: 'Annule dislike sauce !' });
+                }
+                catch (error) { res.status(400).json({ error }) };
+            }
+            // Retourne une erreur si userId dans DB Liked et like = 1
+            if (sauce.usersLiked.includes(req.auth.userId) && req.body.like === -1) {
+                return res.status(403).json({ message: 'Impossible de liker et disliker en simultané !' });
+            }
+            // Retourne une erreur si userId dans DB Disliked et like = 1
+            if (sauce.usersDisliked.includes(req.auth.userId) && req.body.like === 1) {
+                return res.status(403).json({ message: 'Impossible de liker et disliker en simultané !' });
+            }
+            // Retourne une erreur si userId dans DB Liked et like = 1
+            if (sauce.usersLiked.includes(req.auth.userId) && req.body.like === 1) {
+                return res.status(403).json({ message: 'Impossible de liker plusieurs fois une même sauce !' });
+            }
+            // Retourne une erreur si userId dans DB Disliked et like = 1
+            if (sauce.usersDisliked.includes(req.auth.userId) && req.body.like === -1) {
+                return res.status(403).json({ message: 'Impossible de disliker plusieurs fois une même sauce !' });
+            }
+            // Retourne une erreur si userId dans DB Disliked et like = 1
+            if (!sauce.usersDisliked.includes(req.auth.userId) && !sauce.usersDisliked.includes(req.auth.userId) && req.body.like === 0) {
+                return res.status(403).json({ message: `Impossible d'annuler une sauce qui n'est ni liker ni disliker !` });
+            }
+            // Erreur si like différent d'une valeur acceptable
+            if (req.body.like != 1 && req.body.like != 0 && req.body.like != -1) {
+                return res.status(401).json({ message: 'Like doit être égal à -1, 0 ou 1' });
+            }
+            // Erreur si like est vide
+            if (req.body.like.trim().length === 0) {
+                return res.status(401).json({ message: 'Like ne peut être vide' });
+            }
+
         }
     } catch (error) {
         return res.status(404).json({ message: `L'id de la sauce est incorrect` });
