@@ -1,5 +1,6 @@
 require('dotenv').config();
 const express = require('express');
+const helmet = require('helmet')
 const app = express();
 const mongoose = require('mongoose');
 const path = require('path');
@@ -19,6 +20,9 @@ mongoose.connect(`mongodb+srv://${process.env.MONGODB_USERNAME}:${process.env.MO
 
 
 app.use(express.json());
+
+app.use(helmet());
+
 
 // CORS Cross Origin Ressource Sharing (ccès à l'api depuis n'importe quelle origine / ajout des headers aux requêtes envoyées / type de requêtes envoyées)
 app.use((req, res, next) => {
