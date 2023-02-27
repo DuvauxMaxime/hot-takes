@@ -22,26 +22,7 @@ exports.createSauce = async (req, res, next) => {
         await sauce.save();
         return res.status(201).json({ message: 'Sauce enregistrée !' });
     } catch (error) {
-        if (!sauce.name) {
-            return res.status(400).json({ message: ` La donnée name est requise. (La data ne peut être vide)` });
-        };
-        if (!sauce.manufacturer) {
-            return res.status(400).json({ message: ` La donnée manufacturer est requise. (La data ne peut être vide)` });
-        };
-        if (!sauce.description) {
-            return res.status(400).json({ message: ` La donnée description est requise. (La data ne peut être vide)` });
-        };
-        if (!sauce.mainPepper) {
-            return res.status(400).json({ message: ` La donnée mainPepper est requise. (La data ne peut être vide)` });
-        };
-        if (!sauce.imageUrl) {
-            return res.status(400).json({ message: ` La donnée imageUrl est requise. (La data ne peut être vide)` });
-        };
-        if (!sauce.heat) {
-            return res.status(400).json({ message: ` La donnée heat est requise. (La data ne peut être vide)` });
-        } else {
-            return res.status(400).json({ error });
-        };
+        return res.status(400).json({ error });
     };
 };
 
