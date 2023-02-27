@@ -10,7 +10,7 @@ Security Parameters
 Rename .env-dist as .env and configure the file with your personnal data. 
 
 Front end installation
-From the "frontend" folder of the project, run npm install. You can then run the server with npm run ng serve. The server should run on localhost with default port 4200. 
+From the "frontend" folder of the project, run npm install. You can then run the server with npm start. The server should run on localhost with default port 4200. 
 
 Back end installation
 From the "backend" folder of the project, run npm install. You can then run the server with nodemon server. The server should run on localhost with default port 3000. 
