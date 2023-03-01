@@ -155,7 +155,6 @@ exports.likeSauce = async (req, res, next) => {
 // PUT Modifier une sauce
 exports.editSauce = async (req, res, next) => {
     try {
-
         const sauce = await Sauce.findOne({ _id: req.params.id });
         if (sauce === null) {
             return res.status(404).json({ message: `La sauce n'existe pas !` });
