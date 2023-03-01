@@ -21,10 +21,11 @@ mongoose.connect(`mongodb+srv://${process.env.MONGODB_USERNAME}:${process.env.MO
 
 app.use(express.json());
 
-app.use(helmet({
+
+// Helmet sécurise les en-têtes
+app.use(helmet({ 
     crossOriginResourcePolicy: false,
 }));
-
 
 // CORS Cross Origin Ressource Sharing (ccès à l'api depuis n'importe quelle origine / ajout des headers aux requêtes envoyées / type de requêtes envoyées)
 app.use((req, res, next) => {
@@ -43,6 +44,7 @@ app.use('/images', express.static(path.join(__dirname, 'images'))); // Routes li
 app.use('*', function (req, res) { // Gestion erreur sur endpoint introuvable
     return res.status(404).json({ message: `La page demandée n'existe pas` });
 });
+
 
 
 
