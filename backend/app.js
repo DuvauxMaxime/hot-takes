@@ -37,7 +37,7 @@ app.use((req, res, next) => {
 });
 
 
-// Attribution des middlewares aux routes spécifiques
+// Routes principales
 app.use('/api/sauces', sauceRoutes); //Routes liées aux sauces
 app.use('/api/auth', userRoutes); //Routes liées à l'authentification
 app.use('/images', express.static(path.join(__dirname, 'images'))); // Routes liées aux images
