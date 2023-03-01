@@ -27,7 +27,7 @@ app.use(helmet({
     crossOriginResourcePolicy: false,
 }));
 
-// CORS Cross Origin Ressource Sharing (ccès à l'api depuis n'importe quelle origine / ajout des headers aux requêtes envoyées / type de requêtes envoyées)
+// CORS Cross Origin Resource Sharing (accès à l'api depuis n'importe quelle origine / ajout des headers aux requêtes envoyées / type de requêtes envoyées)
 app.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content, Accept, Content-Type, Authorization');
