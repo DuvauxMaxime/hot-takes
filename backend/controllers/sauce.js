@@ -32,7 +32,7 @@ exports.deleteSauce = async (req, res, next) => {
     try {
         const sauce = await Sauce.findOne({ _id: req.params.id });
         if (sauce === null) {
-            return res.status(401).json({ message: `La sauce n'existe pas` });
+            return res.status(404).json({ message: `La sauce n'existe pas` });
         } else {
             if (sauce.userId != req.auth.userId) {
                 return res.status(401).json({ message: 'Non autorisé' });
@@ -59,7 +59,7 @@ exports.likeSauce = async (req, res, next) => {
     try {
         const sauce = await Sauce.findOne({ _id: req.params.id });
         if (sauce === null) {
-            return res.status(401).json({ message: `La sauce n'existe pas` });
+            return res.status(404).json({ message: `La sauce n'existe pas` });
         } else {
             // Ajout like = Vérifie si userId dans aucune DB de la sauce et si la requête envoi like = 1
             if (!sauce.usersLiked.includes(req.auth.userId) && !sauce.usersDisliked.includes(req.auth.userId) && req.body.like === 1) {

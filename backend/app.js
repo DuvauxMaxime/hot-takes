@@ -2,7 +2,7 @@ require('dotenv').config();
 const express = require('express');
 const helmet = require('helmet')
 const app = express();
-const mongoose = require('mongoose');
+const mongoose = require('mongoose'); //Package facilitant les interactions entre app Express et la DB
 const path = require('path');
 
 
@@ -21,7 +21,9 @@ mongoose.connect(`mongodb+srv://${process.env.MONGODB_USERNAME}:${process.env.MO
 
 app.use(express.json());
 
-app.use(helmet());
+app.use(helmet({
+    crossOriginResourcePolicy: false,
+}));
 
 
 // CORS Cross Origin Ressource Sharing (ccès à l'api depuis n'importe quelle origine / ajout des headers aux requêtes envoyées / type de requêtes envoyées)
@@ -29,6 +31,7 @@ app.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content, Accept, Content-Type, Authorization');
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
+    res.setHeader('Cross-Origin-Resource-Policy', 'same-site');
     next();
 });
 
