@@ -118,31 +118,31 @@ exports.likeSauce = async (req, res, next) => {
             }
             // Retourne une erreur si userId dans DB Liked et like = 1
             if (sauce.usersLiked.includes(req.auth.userId) && req.body.like === -1) {
-                return res.status(406).json({ message: 'Impossible de liker et disliker en simultané !' });
+                return res.status(400).json({ message: 'Impossible de liker et disliker en simultané !' });
             }
             // Retourne une erreur si userId dans DB Disliked et like = 1
             if (sauce.usersDisliked.includes(req.auth.userId) && req.body.like === 1) {
-                return res.status(406).json({ message: 'Impossible de liker et disliker en simultané !' });
+                return res.status(400).json({ message: 'Impossible de liker et disliker en simultané !' });
             }
             // Retourne une erreur si userId dans DB Liked et like = 1
             if (sauce.usersLiked.includes(req.auth.userId) && req.body.like === 1) {
-                return res.status(406).json({ message: 'Impossible de liker plusieurs fois une même sauce !' });
+                return res.status(400).json({ message: 'Impossible de liker plusieurs fois une même sauce !' });
             }
             // Retourne une erreur si userId dans DB Disliked et like = 1
             if (sauce.usersDisliked.includes(req.auth.userId) && req.body.like === -1) {
-                return res.status(406).json({ message: 'Impossible de disliker plusieurs fois une même sauce !' });
+                return res.status(400).json({ message: 'Impossible de disliker plusieurs fois une même sauce !' });
             }
             // Retourne une erreur si userId dans DB Disliked et like = 1
             if (!sauce.usersDisliked.includes(req.auth.userId) && !sauce.usersDisliked.includes(req.auth.userId) && req.body.like === 0) {
-                return res.status(406).json({ message: `Impossible d'annuler une sauce qui n'est ni liker ni disliker !` });
+                return res.status(400).json({ message: `Impossible d'annuler une sauce qui n'est ni liker ni disliker !` });
             }
             // Erreur si like différent d'une valeur acceptable
             if (req.body.like != 1 && req.body.like != 0 && req.body.like != -1) {
-                return res.status(406).json({ message: 'Like doit être égal à -1, 0 ou 1' });
+                return res.status(400).json({ message: 'Like doit être égal à -1, 0 ou 1' });
             }
             // Erreur si like est vide
             if (req.body.like.trim().length === 0) {
-                return res.status(406).json({ message: 'Like ne peut être vide' });
+                return res.status(400).json({ message: 'Like ne peut être vide' });
             }
 
         }
