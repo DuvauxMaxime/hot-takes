@@ -1,7 +1,7 @@
 require('dotenv').config();
 const express = require('express');
-const helmet = require('helmet')
 const app = express();
+const helmet = require('helmet');
 const mongoose = require('mongoose'); //Package facilitant les interactions entre app Express et la DB
 const path = require('path');
 
